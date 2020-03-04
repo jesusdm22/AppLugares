@@ -49,7 +49,7 @@ export class Tab1Page {
     this.lugaresFavoritosCollection.doc(id).set(JSON.parse(JSON.stringify(this.lugar)));
     console.log('exito');
     await this.slides.slideNext();
-    this.mensaje(lugarNombre + 'agregado a favoritos!');
+    this.mensaje(lugarNombre + ' agregado a favoritos!');
   }
 
   async mensaje(texto: string) {
