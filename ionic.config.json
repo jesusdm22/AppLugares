@@ -1,5 +1,7 @@
 {
   "name": "AppLugares",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

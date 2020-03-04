@@ -1,7 +1,20 @@
+<style>
+    .centrado{
+        height: 100%;
+        display: block;
+        vertical-align: middle;
+    }
+
+    .sombra {
+        -webkit-box-shadow: 0px 0px 65px -3px rgba(0,0,0,0.73);
+        -moz-box-shadow: 0px 0px 65px -3px rgba(0,0,0,0.73);
+        box-shadow: 0px 0px 65px -3px rgba(0,0,0,0.73);
+    }
+</style>
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      Lugares
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +22,56 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+      <ion-title size="large">Lugares</ion-title>
     </ion-toolbar>
   </ion-header>
+    <ion-slides pager="false" class="centrado" #slides >
+        <ion-slide *ngFor="let lugar of lugares | async" >
+            <ion-card class="sombra">
+                <ion-card-header>
+                    <ion-chip color="tertiary" style="font-size: small">
+                        <ion-icon name="restaurant"></ion-icon>
+                        <ion-label>{{lugar.tipo}}</ion-label>
+                    </ion-chip>
+                    <ion-card-title>{{lugar.nombre}}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-img src="{{lugar.foto}}" style="height: 1%"></ion-img>
+                    <br>
+                    <!-- ESTRELLAS -->
+                    <ion-item lines="none">
+                        <ion-label>Puntuación</ion-label>
+                        <ion-chip color="warning" style="font-size: large">
+                            <ion-label>{{lugar.puntuacion}}/5</ion-label>
+                            <ion-icon name="star"></ion-icon>
+                        </ion-chip>
+                    </ion-item>
+                </ion-card-content>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+                <ion-grid>
+                    <ion-row style="text-align: center">
+                        <!--DISLIKE-->
+                        <ion-col class="ion-align-self-start">
+                            <ion-button color="danger"  style="border-radius: 50px" (click)="next()">
+                                <ion-icon name="close"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <!--../DISLIKE-->
+
+                        <ion-col class="ion-align-self-center">
+                        </ion-col>
+
+                        <!--LIKE-->
+                        <ion-col class="ion-align-self-end">
+                            <ion-button color="success" style="border-radius: 50px"
+                                        (click)="nextAdd(lugar.foto, lugar.id, lugar.nombre, lugar.puntuacion, lugar.tipo)">
+                                <ion-icon name="heart" style="color: red"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <!--../LIKE-->
+                    </ion-row>
+                </ion-grid>
+            </ion-card>
+        </ion-slide>
+    </ion-slides>
 </ion-content>

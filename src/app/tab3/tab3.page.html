@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      Panel de administación
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +9,34 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
+      <ion-title size="large">Panel de administación</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-list>
+    <ion-item *ngFor="let lugar of lugares | async">
+      <ion-avatar slot="start">
+        <img src="{{lugar.foto}}">
+      </ion-avatar>
+      <ion-label>
+        <h2>{{lugar.nombre}}</h2>
+        <ion-chip color="tertiary" style="font-size: small">
+          <ion-icon name="restaurant"></ion-icon>
+          <ion-label>{{lugar.tipo}}</ion-label>
+        </ion-chip>
+        <ion-chip color="warning" style="font-size: small">
+          <ion-label>{{lugar.puntuacion}}/5</ion-label>
+          <ion-icon name="star"></ion-icon>
+        </ion-chip>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+      </ion-label>
+      <ion-button expand="block" size="small" (click)="presentarHojaAcciones(lugar.id, lugar.nombre, lugar.foto, lugar.puntuacion, lugar.tipo)">ACCIONES  <ion-icon slot="end" name="settings"></ion-icon></ion-button>
+    </ion-item>
+  </ion-list>
+  <!-- BOTON AGREGAR-->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="nuevo()">
+    <ion-fab-button>
+      <ion-icon name="add" ></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>
