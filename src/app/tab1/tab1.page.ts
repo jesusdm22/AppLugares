@@ -43,7 +43,7 @@ export class Tab1Page {
     this.slides.slideNext();
   }
 
-  //Esta funcion pasa al siguiente lugar, y agrega un nuevo documento a la coleccion
+  // Esta funcion pasa al siguiente lugar, y agrega un nuevo documento a la coleccion
   async nextAdd(lugarFoto: string, id: string, lugarNombre: string,  lugarPuntuacion: number, lugarTipo: string) {
     this.lugar = new Lugar(lugarFoto, id, lugarNombre, lugarPuntuacion, lugarTipo);
     this.lugaresFavoritosCollection.doc(id).set(JSON.parse(JSON.stringify(this.lugar)));
@@ -57,7 +57,7 @@ export class Tab1Page {
       message: texto,
       duration: 1000,
       position: 'top',
-      color: "success"
+      color: 'success'
     });
     await toast.present();
   }

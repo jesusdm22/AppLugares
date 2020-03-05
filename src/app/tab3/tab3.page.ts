@@ -15,17 +15,62 @@ export class Tab3Page {
   // Lugares
   lugaresCollection: AngularFirestoreCollection<Lugar>;
   lugares: Observable<Lugar[]>;
+  dash = false;
 
   // Lugares favoritos
   lugaresFavoritosCollection: AngularFirestoreCollection<Lugar>;
   lugaresFavoritos: Observable<Lugar[]>;
   lugar: any;
 
-  constructor(private afs: AngularFirestore, private alertController: AlertController,
+  constructor(public afs: AngularFirestore, private alertController: AlertController,
               public actionSheetController: ActionSheetController, public toastController: ToastController) {
+    // LLamamos a la funcion inicial
+    //this.OnInit();
     this.lugaresCollection = afs.collection<Lugar>('lugares');
     this.lugares = this.lugaresCollection.valueChanges();
 
+  }
+
+  // Funcion inicial: Esta comprobara los datos de inicio de sesión, si son correctos, llamara a la BD
+  // y mostrará los lugares
+  async OnInit() {
+    let sesion = false;
+    do {
+      const alertaNuevo = await this.alertController.create({
+        header: 'Iniciar sesion',
+        inputs: [
+          {
+            name: 'Usuario',
+            type: 'text',
+          },
+          {
+            name: 'Pass',
+            type: 'password',
+          }
+        ],
+        buttons: [
+          {
+            text: 'Iniciar sesion',
+            cssClass: 'primary',
+            handler: data => {
+              console.log('Logueado: usuario:' + data.Usuario + ' pass: ' + data.Pass);
+              // Aqui obtendremos de la BD un usuario administrador
+              // this.afs.collection('usuarios')
+              if (data.Usuario === 'admin' && data.Pass === 'pass') {
+                sesion = true;
+                this.mensaje('Sesión iniciada', 1000, 'success');
+                this.lugaresCollection = this.afs.collection<Lugar>('lugares');
+                this.lugares = this.lugaresCollection.valueChanges();
+              } else {
+                this.mensaje('Datos incorrectos', 1000, 'danger');
+              }
+            }
+          }
+        ]
+      });
+      // Presentamos el inicio de sesion
+      await alertaNuevo.present();
+    } while (sesion);
   }
 
   // Hoja de accion
@@ -101,7 +146,7 @@ export class Tab3Page {
         }, {
           text: 'Guardar',
           handler: data => {
-            //Generamos el id
+            // Generamos el id
             let id = this.generaId(10);
 
             if (data.Nombre === '' || data.Foto === '' || data.Puntuacion === '' || data.Tipo === '') {
@@ -249,6 +294,22 @@ export class Tab3Page {
     await toast.present();
   }
 
+
+  // login
+  login() {
+    const user = document.getElementById('user').value;
+    const pass = document.getElementById('pass').value;
+    console.log(user);
+    if (user === 'admin' && pass === 'pass') {
+      this.mensaje('Sesion iniciada correctamente', 1000, 'success');
+      this.dash = true;
+    } else {
+      this.mensaje('Datos erroneos', 1000, 'danger');
+      user.value = '';
+      pass.value = '';
+    }
+
+  }
 
   // Funcion para generar IDs
    generaId(length) {

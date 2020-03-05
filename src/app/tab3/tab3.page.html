@@ -12,7 +12,12 @@
       <ion-title size="large">Panel de administación</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-list>
+  <div *ngIf="!dash">
+    <ion-input type="text" id="user" style="border: 1px solid black; border-radius: 50px;"></ion-input>
+    <ion-input type="password" id="pass" style="border: 1px solid black; border-radius: 50px;"></ion-input>
+    <ion-button color="primary" (click)="login()">Login</ion-button>
+  </div>
+  <ion-list *ngIf="dash">
     <ion-item *ngFor="let lugar of lugares | async">
       <ion-avatar slot="start">
         <img src="{{lugar.foto}}">
@@ -33,7 +38,7 @@
     </ion-item>
   </ion-list>
   <!-- BOTON AGREGAR-->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="nuevo()">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="nuevo()" *ngIf="dash">
     <ion-fab-button>
       <ion-icon name="add" ></ion-icon>
     </ion-fab-button>
