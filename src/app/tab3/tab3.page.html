@@ -9,14 +9,32 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Panel de administación</ion-title>
+      <ion-title size="large">Dashboard</ion-title>
     </ion-toolbar>
   </ion-header>
-  <div *ngIf="!dash">
-    <ion-input type="text" id="user" style="border: 1px solid black; border-radius: 50px;"></ion-input>
-    <ion-input type="password" id="pass" style="border: 1px solid black; border-radius: 50px;"></ion-input>
-    <ion-button color="primary" (click)="login()">Login</ion-button>
+
+
+<!-- LOGIN -->
+  <ion-card *ngIf="!dash">
+    <ion-card-header>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-input type="text"  [(ngModel)]="user" class="input"></ion-input>
+      <br>
+      <ion-input type="password" [(ngModel)]="pass" class="input"></ion-input>
+      <br>
+      <ion-button color="primary" (click)="login()">Iniciar sesion</ion-button>
+    </ion-card-content>
+    <ion-footer class="ion-text-center">Jesús Díaz Muñoz</ion-footer><br>
+  </ion-card>
+
+  <div  style="padding: 5%">
+
   </div>
+
+
+
   <ion-list *ngIf="dash">
     <ion-item *ngFor="let lugar of lugares | async">
       <ion-avatar slot="start">

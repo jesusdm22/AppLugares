@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import {Lugar} from '../models/Lugar';
-import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/firestore";
-import {Observable} from "rxjs";
-import {AlertController, ToastController} from "@ionic/angular";
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {Observable} from 'rxjs';
+import {AlertController, ToastController} from '@ionic/angular';
 import { ActionSheetController } from '@ionic/angular';
 
 
@@ -12,6 +12,15 @@ import { ActionSheetController } from '@ionic/angular';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
+
+  constructor(public afs: AngularFirestore, private alertController: AlertController,
+              public actionSheetController: ActionSheetController, public toastController: ToastController) {
+    // LLamamos a la funcion inicial
+    // this.OnInit();
+    this.lugaresCollection = afs.collection<Lugar>('lugares');
+    this.lugares = this.lugaresCollection.valueChanges();
+
+  }
   // Lugares
   lugaresCollection: AngularFirestoreCollection<Lugar>;
   lugares: Observable<Lugar[]>;
@@ -22,14 +31,10 @@ export class Tab3Page {
   lugaresFavoritos: Observable<Lugar[]>;
   lugar: any;
 
-  constructor(public afs: AngularFirestore, private alertController: AlertController,
-              public actionSheetController: ActionSheetController, public toastController: ToastController) {
-    // LLamamos a la funcion inicial
-    //this.OnInit();
-    this.lugaresCollection = afs.collection<Lugar>('lugares');
-    this.lugares = this.lugaresCollection.valueChanges();
 
-  }
+  // login
+  user: string;
+  pass: string;
 
   // Funcion inicial: Esta comprobara los datos de inicio de sesión, si son correctos, llamara a la BD
   // y mostrará los lugares
@@ -147,16 +152,17 @@ export class Tab3Page {
           text: 'Guardar',
           handler: data => {
             // Generamos el id
-            let id = this.generaId(10);
+            const id = this.generaId(10);
 
             if (data.Nombre === '' || data.Foto === '' || data.Puntuacion === '' || data.Tipo === '') {
               this.mensaje('Error al agregar. No puede haber campos vacios.', 4000, 'danger');
             } else {
               // Agregamos un nuevo documento
               this.afs.collection('lugares').doc(id).set({
-                id: id,
+                id,
                 foto: data.Foto,
                 nombre: data.Nombre,
+                // tslint:disable-next-line:radix
                 puntuacion: parseInt(data.Puntuacion),
                 tipo: data.Tipo
               })
@@ -229,9 +235,10 @@ export class Tab3Page {
             } else {
               // Agregamos un nuevo documento
               this.afs.collection('lugares').doc(id).update({
-                id: id,
+                id,
                 foto: data.Foto,
                 nombre: data.Nombre,
+                // tslint:disable-next-line:radix
                 puntuacion: parseInt(data.Puntuacion),
                 tipo: data.Tipo
               })
@@ -293,29 +300,25 @@ export class Tab3Page {
     });
     await toast.present();
   }
-
-
-  // login
   login() {
-    const user = document.getElementById('user').value;
-    const pass = document.getElementById('pass').value;
-    console.log(user);
-    if (user === 'admin' && pass === 'pass') {
+
+    console.log(this.user);
+    if (this.user === 'admin' && this.pass === 'pass') {
       this.mensaje('Sesion iniciada correctamente', 1000, 'success');
       this.dash = true;
     } else {
       this.mensaje('Datos erroneos', 1000, 'danger');
-      user.value = '';
-      pass.value = '';
+      // user.value = '';
+     // pass.value = '';
     }
 
   }
 
   // Funcion para generar IDs
    generaId(length) {
-    let resultado           = '';
-    let caracteres       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let longitudCaracteres = caracteres.length;
+    let resultado  = '';
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const longitudCaracteres = caracteres.length;
     for (let i = 0; i < length; i++ ) {
       resultado += caracteres.charAt(Math.floor(Math.random() * longitudCaracteres));
     }

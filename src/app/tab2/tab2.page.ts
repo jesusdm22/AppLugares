@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import {Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {Lugar} from '../models/Lugar';
-import {AlertController, ToastController} from '@ionic/angular';
+import {AlertController, ToastController, ModalController} from '@ionic/angular';
+import {DetallesComponent} from '../detalles/detalles.component';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class Tab2Page {
   lugaresFavoritos: Observable<Lugar[]>;
   lugar: any;
 
-  constructor(private afs: AngularFirestore, private alertController: AlertController, public toastController: ToastController) {
+  constructor(private afs: AngularFirestore, private alertController: AlertController,
+              public toastController: ToastController, public modalController: ModalController) {
     this.lugaresCollection = afs.collection<Lugar>('lugares');
 
     this.lugares = this.lugaresCollection.valueChanges();
@@ -31,7 +33,7 @@ export class Tab2Page {
 
   }
 
-  //Esta funcion recibe el id del documento a eliminar.
+  // Esta funcion recibe el id del documento a eliminar.
   async delete(id: string) {
 
     const alert = await this.alertController.create({
@@ -67,5 +69,18 @@ export class Tab2Page {
       color: estilo
     });
     await toast.present();
+  }
+
+  // Funcion para mostrar detalles del elemento
+    showDetalles(id: string, nombre: string, foto: string, puntuacion: number, tipo: string) {
+        this.presentModal();
+    }
+
+    // Modal
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: DetallesComponent
+    });
+    return await modal.present();
   }
 }
