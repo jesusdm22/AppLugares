@@ -15,8 +15,7 @@ export class Tab3Page {
 
   constructor(public afs: AngularFirestore, private alertController: AlertController,
               public actionSheetController: ActionSheetController, public toastController: ToastController) {
-    // LLamamos a la funcion inicial
-    // this.OnInit();
+
     this.lugaresCollection = afs.collection<Lugar>('lugares');
     this.lugares = this.lugaresCollection.valueChanges();
 
@@ -26,57 +25,10 @@ export class Tab3Page {
   lugares: Observable<Lugar[]>;
   dash = false;
 
-  // Lugares favoritos
-  lugaresFavoritosCollection: AngularFirestoreCollection<Lugar>;
-  lugaresFavoritos: Observable<Lugar[]>;
-  lugar: any;
-
-
   // login
   user: string;
   pass: string;
 
-  // Funcion inicial: Esta comprobara los datos de inicio de sesión, si son correctos, llamara a la BD
-  // y mostrará los lugares
-  async OnInit() {
-    let sesion = false;
-    do {
-      const alertaNuevo = await this.alertController.create({
-        header: 'Iniciar sesion',
-        inputs: [
-          {
-            name: 'Usuario',
-            type: 'text',
-          },
-          {
-            name: 'Pass',
-            type: 'password',
-          }
-        ],
-        buttons: [
-          {
-            text: 'Iniciar sesion',
-            cssClass: 'primary',
-            handler: data => {
-              console.log('Logueado: usuario:' + data.Usuario + ' pass: ' + data.Pass);
-              // Aqui obtendremos de la BD un usuario administrador
-              // this.afs.collection('usuarios')
-              if (data.Usuario === 'admin' && data.Pass === 'pass') {
-                sesion = true;
-                this.mensaje('Sesión iniciada', 1000, 'success');
-                this.lugaresCollection = this.afs.collection<Lugar>('lugares');
-                this.lugares = this.lugaresCollection.valueChanges();
-              } else {
-                this.mensaje('Datos incorrectos', 1000, 'danger');
-              }
-            }
-          }
-        ]
-      });
-      // Presentamos el inicio de sesion
-      await alertaNuevo.present();
-    } while (sesion);
-  }
 
   // Hoja de accion
   async presentarHojaAcciones(lugarId: string, lugarNombre: string, lugarFoto: string, lugarPuntuacion: number, lugarTipo: string) {
@@ -96,7 +48,6 @@ export class Tab3Page {
         handler: () => {
           this.editar(lugarId, lugarNombre, lugarFoto, lugarPuntuacion, lugarTipo);
           console.log('Editando:' + lugarNombre );
-          // this.mensaje('Editado con exito', 1000, 'success');
         }
       }, {
         text: 'Cancelar',
@@ -132,6 +83,7 @@ export class Tab3Page {
         {
           name: 'Puntuacion',
           type: 'number',
+          max: 5,
           placeholder: 'Puntuacion'
         },
         {
@@ -209,6 +161,7 @@ export class Tab3Page {
         {
           name: 'Puntuacion',
           type: 'number',
+          max: 5,
           value: puntuacion,
           placeholder: puntuacion.toString()
         },
@@ -280,12 +233,10 @@ export class Tab3Page {
           handler: () => {
             this.afs.collection('lugares').doc(id).delete();
             console.log('eliminado con exito');
-            this.mensaje('Eliminado con exito', 1000, 'top');
+            this.mensaje('Eliminado con exito', 1000, 'success');
           }
-
         }
       ]
-
     });
 
     await alertaDelete.present();
@@ -308,8 +259,6 @@ export class Tab3Page {
       this.dash = true;
     } else {
       this.mensaje('Datos erroneos', 1000, 'danger');
-      // user.value = '';
-     // pass.value = '';
     }
 
   }

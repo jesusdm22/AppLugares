@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 import {Lugar} from '../models/Lugar';
 import {AlertController, ToastController, ModalController} from '@ionic/angular';
-import {DetallesComponent} from '../detalles/detalles.component';
+import {DetallesPage} from '../detalles/detalles.page';
 
 
 @Component({
@@ -73,13 +73,20 @@ export class Tab2Page {
 
   // Funcion para mostrar detalles del elemento
     showDetalles(id: string, nombre: string, foto: string, puntuacion: number, tipo: string) {
-        this.presentModal();
+        this.presentModal(id, nombre, foto, puntuacion, tipo);
     }
 
     // Modal
-  async presentModal() {
+  async presentModal(id: string, nombre: string, foto: string, puntuacion: number, tipo: string) {
     const modal = await this.modalController.create({
-      component: DetallesComponent
+      component: DetallesPage,
+      componentProps: {
+        idLugar: id,
+        nombreLugar: nombre,
+        fotoLugar: foto,
+        puntuacionLugar: puntuacion,
+        tipoLugar: tipo
+      }
     });
     return await modal.present();
   }

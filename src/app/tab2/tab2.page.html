@@ -14,7 +14,7 @@
   </ion-header>
 
   <ion-list>
-    <ion-item *ngFor="let lugarFavorito of lugaresFavoritos | async" (click)="showDetalles(lugarFavorito.foto, lugarFavorito.id, lugarFavorito.nombre, lugarFavorito.puntuacion, lugarFavorito.tipo)">
+    <ion-item *ngFor="let lugarFavorito of lugaresFavoritos | async" (click)="showDetalles(lugarFavorito.id, lugarFavorito.nombre, lugarFavorito.foto, lugarFavorito.puntuacion, lugarFavorito.tipo)">
       <ion-avatar slot="start">
         <img src="{{lugarFavorito.foto}}">
       </ion-avatar>

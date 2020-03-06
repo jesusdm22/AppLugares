@@ -12,6 +12,4 @@ export class Lugar {
         this.puntuacion = puntuacion;
         this.tipo = tipo;
     }
-
-
 }
