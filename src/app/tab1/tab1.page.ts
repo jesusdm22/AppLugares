@@ -16,7 +16,6 @@ import { IonSlides} from '@ionic/angular';
 })
 export class Tab1Page {
 
-
   // Lugares
   lugaresCollection: AngularFirestoreCollection<Lugar>;
   lugares: Observable<Lugar[]>;
